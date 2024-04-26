@@ -2,13 +2,13 @@
 
 #include <iostream>
 
-Board::Board(int boardSize)
+Board::Board (unsigned short int boardSize)
 {
 	size = boardSize;
 	states.resize(size, std::vector<States>(size));
 }
 
-int Board::getBoardSize() const
+unsigned short int Board::getBoardSize() const
 {
 	return size;
 }
@@ -44,10 +44,53 @@ void Board::printBoard() const
     std::cout << std::endl;
 }
 
-void Board::placeMark(int xPos, int yPos, States state)
+void Board::placeMark(unsigned short int xPos, unsigned short int yPos, States state)
 {
     if (state == States::Nil)
         return;
 
     states[xPos][yPos] = state;
+}
+
+States Board::checkBoardWin(unsigned short int xPos, unsigned short int yPos) const
+{
+    const States state = states[xPos][yPos];
+
+    // check for column win
+    for (int i = 0; i < size; i++) {
+        if (states[xPos][i] != state)
+            break;
+        if (i == size - 1)
+            return state == States::O ? States::O : States::X;
+    }
+
+    // check for row win
+    for (int i = 0; i < size; i++) {
+        if (states[i][yPos] != state)
+            break;
+        if (i == size - 1)
+            return state == States::O ? States::O : States::X;
+    }
+
+    // check diagonal win
+    if (xPos == yPos) {
+        for (int i = 0; i < size; i++) {
+            if (states[i][i] != state)
+                break;
+            if (i == size - 1)
+                return state == States::O ? States::O : States::X;
+        }
+    }
+
+    // check anti diagonal win
+    if (xPos + yPos == size - 1) {
+        for (int i = 0; i < size; i++) {
+            if (states[i][(size - 1) - i] != state)
+                break;
+            if (i == size - 1)
+                return state == States::O ? States::O : States::X;
+        }
+    }
+
+    return States::Nil;
 }
