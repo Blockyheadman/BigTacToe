@@ -1,6 +1,10 @@
 # BigTacToe
 ## It's TicTacToe, but bigger. (For a school project)
 
+# NOTE
+This program only compiles and runs when using DEBUG mode in Visual Studio 2022.
+Due to compiler optimizations, it messes up the program somehow and makes it not work with those optimizations.
+
 ## Controls
 Simply enough, you only need a number row to play and an enter key.
 Type the row and column you wish to place your mark in, hit enter, repeat until victory.
