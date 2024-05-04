@@ -12,16 +12,16 @@ enum States
 class Board
 {
 public:
-	Board(unsigned short int boardSize = 3);
+	Board(unsigned short boardSize = 3);
 
-	unsigned short int getBoardSize() const;
+	unsigned short getBoardSize() const;
 	void printBoard() const;
-	States checkBoardWin(unsigned short int xPos, unsigned short int yPos) const;
-	States getState(unsigned short int xPos, unsigned short int yPos) const;
+	States checkBoardWin(unsigned short xPos, unsigned short yPos) const;
+	States getState(unsigned short xPos, unsigned short yPos) const;
 
-	bool placeMark(unsigned short int xPos, unsigned short int yPos, States state);
+	bool placeMark(unsigned short xPos, unsigned short yPos, States state);
 	static const char* getStateString(States state);
 private:
-	unsigned short int size;
+	unsigned short size;
 	std::vector<std::vector<States>> states;
 };

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <array>
 
 #include "Board.h"
 
@@ -8,10 +9,10 @@ static void clearScreen()
 		<< "\033[1;1H";     // move cursor home
 }
 
-static int* getUserInput(unsigned short int boardSize)
+static std::array<unsigned short, 2> getUserInput(unsigned short boardSize)
 {
-	unsigned short int xPos = 0;
-	unsigned short int yPos = 0;
+	unsigned short xPos = 0;
+	unsigned short yPos = 0;
 
 	do
 	{
@@ -50,7 +51,9 @@ static int* getUserInput(unsigned short int boardSize)
 
 	} while (xPos > boardSize || yPos > boardSize);
 
-	int input[] = { xPos, yPos };
+	std::array<unsigned short, 2> input;
+	input[0] = xPos;
+	input[1] = yPos;
 
 	return input;
 }
@@ -61,24 +64,19 @@ int main()
 	Board bigBoard = Board();
 	Board innerBoards[9];
 
-	for (unsigned short int i = 0; i < 9; i++)
+	for (short i = 0; i < 9; i++)
 		innerBoards[i] = Board();
 
-	unsigned short int bigXPos;
-	unsigned short int bigYPos;
-	unsigned short int xPos;
-	unsigned short int yPos;
+	unsigned short bigXPos = 0;
+	unsigned short bigYPos = 0;
+	unsigned short xPos = 0;
+	unsigned short yPos = 0;
 
 	bool insideInnerBoard;
 
-	int* input_ptr;
+	std::array<unsigned short, 2> input_array;
 
 	std::cout << "\n\n";
-
-	/*bigBoard.placeMark(1, 1, States::X);
-	bigBoard.placeMark(2, 2, States::X);
-	innerBoards[8].placeMark(1, 1, States::X);
-	innerBoards[8].placeMark(2, 2, States::X);*/
 
 	do
 	{
@@ -86,10 +84,10 @@ int main()
 		std::cout << (turn % 2 == 0 ? "X" : "O") << " turn.\n-----\n";
 
 		// get big board option
-		input_ptr = getUserInput(bigBoard.getBoardSize());
+		input_array = getUserInput(bigBoard.getBoardSize());
 
-		bigXPos = input_ptr[0];
-		bigYPos = input_ptr[1];
+		bigXPos = input_array[0];
+		bigYPos = input_array[1];
 
 		clearScreen();
 
@@ -100,7 +98,7 @@ int main()
 		}
 
 		// get smaller board option
-		unsigned short int currentBoard = (bigXPos - 1) * 3 + (bigYPos - 1);
+		unsigned short currentBoard = (bigXPos - 1) * 3 + (bigYPos - 1);
 		insideInnerBoard = true;
 
 		std::cout << "\n";
@@ -110,10 +108,10 @@ int main()
 			std::cout << "Inner board #" << currentBoard + 1 << '\n';
 			innerBoards[currentBoard].printBoard();
 
-			input_ptr = getUserInput(bigBoard.getBoardSize());
+			input_array = getUserInput(bigBoard.getBoardSize());
 
-			xPos = input_ptr[0];
-			yPos = input_ptr[1];
+			xPos = input_array[0];
+			yPos = input_array[1];
 
 			if (!innerBoards[currentBoard].placeMark(xPos, yPos, turn % 2 == 0 ? States::X : States::O))
 			{
