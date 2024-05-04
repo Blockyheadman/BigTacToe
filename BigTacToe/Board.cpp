@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Board::Board (unsigned short int boardSize)
+Board::Board(unsigned short int boardSize)
 {
 	size = boardSize;
 	states.resize(size, std::vector<States>(size));
@@ -15,82 +15,107 @@ unsigned short int Board::getBoardSize() const
 
 void Board::printBoard() const
 {
-    std::cout << "    ";
-    for (int i = 0; i < states.size(); i++)
-        std::cout << i + 1 << "   ";
+	std::cout << "    ";
+	for (int i = 0; i < states.size(); i++)
+		std::cout << i + 1 << "   ";
 
-    std::cout << std::endl << "  ";
-    for (int i = 0; i < (states.size() * 4) + 1; i++)
-        std::cout << "-";
-    std::cout << std::endl;
+	std::cout << std::endl << "  ";
+	for (int i = 0; i < (states.size() * 4) + 1; i++)
+		std::cout << "-";
+	std::cout << std::endl;
 
-    for (int i = 0; i < states.size(); i++)
-    {
-        std::cout << i + 1 << " ";
-        for (int j = 0; j < states[i].size(); j++)
-        {
-            std::cout << "|";
-            if (states[i][j] == States::X) std::cout << " X ";
-            else if (states[i][j] == States::O) std::cout << " O ";
-            else if (states[i][j] == States::Nil) std::cout << "Nil";
-            else std::cout << "   ";
-        }
-        std::cout << "|" << std::endl;
-        std::cout << "  ";
-        for (int k = 0; k < (states.size() * 4) + 1; k++)
-            std::cout << "-";
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
+	for (int i = 0; i < states.size(); i++)
+	{
+		std::cout << i + 1 << " ";
+		for (int j = 0; j < states[i].size(); j++)
+		{
+			std::cout << "|";
+			if (states[i][j] == States::X) std::cout << " X ";
+			else if (states[i][j] == States::O) std::cout << " O ";
+			//else if (states[i][j] == States::Nil) std::cout << "Nil"; // for debug reasons to see if a spot is nil
+			else std::cout << "   ";
+		}
+		std::cout << "|" << std::endl;
+		std::cout << "  ";
+		for (int k = 0; k < (states.size() * 4) + 1; k++)
+			std::cout << "-";
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
 
-void Board::placeMark(unsigned short int xPos, unsigned short int yPos, States state)
+bool Board::placeMark(unsigned short int xPos, unsigned short int yPos, States state)
 {
-    if (state == States::Nil)
-        return;
+	if (state == States::Nil) {
+		return false;
+	}
+	else if (states[xPos - 1][yPos - 1] != States::Nil)
+	{
+		return false;
+	}
+	else
+	{
+		states[xPos - 1][yPos - 1] = state;
+		return true;
+	}
 
-    states[xPos][yPos] = state;
 }
 
 States Board::checkBoardWin(unsigned short int xPos, unsigned short int yPos) const
 {
-    const States state = states[xPos][yPos];
+	const States playerState = states[xPos - 1][yPos - 1];
 
-    // check for column win
-    for (int i = 0; i < size; i++) {
-        if (states[xPos][i] != state)
-            break;
-        if (i == size - 1)
-            return state == States::O ? States::O : States::X;
-    }
+	if (playerState == States::Nil)
+		return States::Nil;
 
-    // check for row win
-    for (int i = 0; i < size; i++) {
-        if (states[i][yPos] != state)
-            break;
-        if (i == size - 1)
-            return state == States::O ? States::O : States::X;
-    }
+	// check for column win
+	for (int i = 0; i < size; i++) {
+		if (states[xPos - 1][i] != playerState)
+			break;
+		if (i == size - 1)
+			return playerState;
+	}
 
-    // check diagonal win
-    if (xPos == yPos) {
-        for (int i = 0; i < size; i++) {
-            if (states[i][i] != state)
-                break;
-            if (i == size - 1)
-                return state == States::O ? States::O : States::X;
-        }
-    }
+	// check for row win
+	for (int i = 0; i < size; i++) {
+		if (states[i][yPos - 1] != playerState)
+			break;
+		if (i == size - 1)
+			return playerState;
+	}
 
-    // check anti diagonal win
-    if (xPos + yPos == size - 1) {
-        for (int i = 0; i < size; i++) {
-            if (states[i][(size - 1) - i] != state)
-                break;
-            if (i == size - 1)
-                return state == States::O ? States::O : States::X;
-        }
-    }
+	// check diagonal win
+	if (xPos - 1 == yPos - 1) {
+		for (int i = 0; i < size; i++) {
+			if (states[i][i] != playerState)
+				break;
+			if (i == size - 1)
+				return playerState;
+		}
+	}
 
-    return States::Nil;
+	// check anti diagonal win
+	if (xPos - 1 + yPos - 1 == size - 1) {
+		for (int i = 0; i < size; i++) {
+			if (states[i][(size - 1) - i] != playerState)
+				break;
+			if (i == size - 1)
+				return playerState;
+		}
+	}
+
+	return States::Nil;
+}
+States Board::getState(unsigned short int xPos, unsigned short int yPos) const
+{
+	return states[xPos - 1][yPos - 1];
+}
+
+const char* Board::getStateString(States state)
+{
+	switch (state) {
+	case States::X: return "X";
+	case States::O: return "O";
+	case States::Nil: return "Nil";
+	}
 }
