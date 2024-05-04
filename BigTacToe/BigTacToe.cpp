@@ -64,15 +64,14 @@ int main()
 	for (unsigned short int i = 0; i < 9; i++)
 		innerBoards[i] = Board();
 
-	unsigned short int bigXPos = 0;
-	unsigned short int bigYPos = 0;
-	unsigned short int xPos = 0;
-	unsigned short int yPos = 0;
+	unsigned short int bigXPos;
+	unsigned short int bigYPos;
+	unsigned short int xPos;
+	unsigned short int yPos;
 
-	bool gameWon = false;
-	bool insideInnerBoard = false;
+	bool insideInnerBoard;
 
-	int* input_ptr = NULL;
+	int* input_ptr;
 
 	std::cout << "\n\n";
 
@@ -101,7 +100,7 @@ int main()
 		}
 
 		// get smaller board option
-		short int currentBoard = (bigXPos - 1) * 3 + (bigYPos - 1);
+		unsigned short int currentBoard = (bigXPos - 1) * 3 + (bigYPos - 1);
 		insideInnerBoard = true;
 
 		std::cout << "\n";
@@ -134,13 +133,12 @@ int main()
 		std::cout << "\n\n";
 
 		if (bigBoard.checkBoardWin(bigXPos, bigYPos) != States::Nil) {
-			gameWon = true;
 			break;
 		}
 
 		turn++;
 
-	} while (!gameWon);
+	} while (true);
 
 	bigBoard.printBoard();
 	std::cout << '\n' << Board::getStateString(turn % 2 == 0 ? States::X : States::O) << " has won the game!\n\n";
