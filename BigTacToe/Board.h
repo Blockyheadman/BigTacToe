@@ -12,12 +12,12 @@ enum States
 class Board
 {
 public:
-	Board(unsigned short boardSize = 3);
+	explicit Board(unsigned short boardSize = 3);
 
-	unsigned short getBoardSize() const;
+	[[nodiscard]] unsigned short getBoardSize() const;
 	void printBoard() const;
-	States checkBoardWin(unsigned short xPos, unsigned short yPos) const;
-	States getState(unsigned short xPos, unsigned short yPos) const;
+	[[nodiscard]] States checkBoardWin(unsigned short xPos, unsigned short yPos) const;
+	[[nodiscard]] States getState(unsigned short xPos, unsigned short yPos) const;
 
 	bool placeMark(unsigned short xPos, unsigned short yPos, States state);
 	static const char* getStateString(States state);

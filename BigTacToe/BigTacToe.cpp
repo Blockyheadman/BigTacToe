@@ -17,41 +17,26 @@ static std::array<unsigned short, 2> getUserInput(unsigned short boardSize)
 	do
 	{
 		std::cout << "Enter row #: ";
-		if (!(std::cin >> xPos)) {
-			xPos = boardSize + 1;
-			std::cout << "Try again." << std::endl;
-			std::cin.clear();
-			std::cin.ignore();
-			continue;
-		}
-
-		if (xPos > boardSize || xPos < 0) {
+		if (!(std::cin >> xPos) && xPos > boardSize || xPos < 0) {
 			xPos = boardSize + 1;
 			std::cout << "Try entering a number between 1 and " << boardSize << std::endl;
 			std::cin.clear();
-			std::cin.ignore();
-			continue;
-		}
-		std::cout << "Enter column #: ";
-		if (!(std::cin >> yPos)) {
-			yPos = boardSize + 1;
-			std::cout << "Try again." << std::endl;
-			std::cin.clear();
-			std::cin.ignore();
+			std::cin.ignore(INT_MAX, '\n');
 			continue;
 		}
 
-		if (yPos > boardSize || yPos < 0) {
+		std::cout << "Enter column #: ";
+		if (!(std::cin >> yPos) || yPos > boardSize || yPos < 0) {
 			yPos = boardSize + 1;
-			std::cout << "Incorrect input, try again." << std::endl;
+			std::cout << "Try entering a number between 1 and " << boardSize << std::endl;
 			std::cin.clear();
-			std::cin.ignore();
+			std::cin.ignore(INT_MAX, '\n');
 			continue;
 		}
 
 	} while (xPos > boardSize || yPos > boardSize);
 
-	std::array<unsigned short, 2> input;
+	std::array<unsigned short, 2> input{};
 	input[0] = xPos;
 	input[1] = yPos;
 
@@ -64,17 +49,17 @@ int main()
 	Board bigBoard = Board();
 	Board innerBoards[9];
 
-	for (short i = 0; i < 9; i++)
-		innerBoards[i] = Board();
+	for (auto& innerBoard : innerBoards)
+		innerBoard = Board();
 
-	unsigned short bigXPos = 0;
-	unsigned short bigYPos = 0;
-	unsigned short xPos = 0;
-	unsigned short yPos = 0;
+	unsigned short bigXPos;
+	unsigned short bigYPos;
+	unsigned short xPos;
+	unsigned short yPos;
 
 	bool insideInnerBoard;
 
-	std::array<unsigned short, 2> input_array;
+	std::array<unsigned short, 2> input_array{};
 
 	std::cout << "\n\n";
 

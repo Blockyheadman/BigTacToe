@@ -1,15 +1,24 @@
 # BigTacToe
 ## It's TicTacToe, but bigger. (For a school project)
 
-# NOTE
-This program only compiles and runs when using DEBUG mode in Visual Studio 2022.
-Due to compiler optimizations, it messes up the program somehow and makes it not work with those optimizations.
+## DO NOTE:
+
+This program has been flagged as a trojan on my device.
+I promise, if you look through the code, there is no malicious intent going on.
+It's just TicTacToe.
 
 ## Controls
 Simply enough, you only need a number row to play and an enter key.
 Type the row and column you wish to place your mark in, hit enter, repeat until victory.
 
-This project only uses around 700~ KB of memory and runs WAY faster than Java could do here, while still being cross platform too!
+## Extra Info
+This project only uses 600~ KB of memory and takes up 22 KB of space!
+For debug, it's around 700~ KB of memory and takes up 115 KB of space!
 
+It's memory safe so it should be okay to run this anywhere.
+
+It's cross compatable! This can run on just about any OS that supports C++.
+
+## License
 This is licensed under an MIT license which allows for free use of this software
 in any way as long as it contains a copy of this license with it.

@@ -16,18 +16,19 @@ unsigned short Board::getBoardSize() const
 void Board::printBoard() const
 {
 	std::cout << "    ";
-	for (unsigned short i = 0; i < states.size(); i++)
+
+	for (int i = 0; i < states.size(); i++)
 		std::cout << i + 1 << "   ";
 
 	std::cout << std::endl << "  ";
-	for (unsigned short i = 0; i < (states.size() * 4) + 1; i++)
+	for (int i = 0; i < (states.size() * 4) + 1; i++)
 		std::cout << "-";
 	std::cout << std::endl;
 
-	for (unsigned short i = 0; i < states.size(); i++)
+	for (int i = 0; i < states.size(); i++)
 	{
 		std::cout << i + 1 << " ";
-		for (unsigned short j = 0; j < states[i].size(); j++)
+		for (int j = 0; j < states[i].size(); j++)
 		{
 			std::cout << "|";
 			if (states[i][j] == States::X) std::cout << " X ";
@@ -37,7 +38,7 @@ void Board::printBoard() const
 		}
 		std::cout << "|" << std::endl;
 		std::cout << "  ";
-		for (unsigned short k = 0; k < (states.size() * 4) + 1; k++)
+		for (int k = 0; k < (states.size() * 4) + 1; k++)
 			std::cout << "-";
 		std::cout << std::endl;
 	}
@@ -46,13 +47,8 @@ void Board::printBoard() const
 
 bool Board::placeMark(unsigned short xPos, unsigned short yPos, States state)
 {
-	if (state == States::Nil) {
+	if (state == States::Nil || states[xPos - 1][yPos - 1] != States::Nil)
 		return false;
-	}
-	else if (states[xPos - 1][yPos - 1] != States::Nil)
-	{
-		return false;
-	}
 	else
 	{
 		states[xPos - 1][yPos - 1] = state;
@@ -106,6 +102,7 @@ States Board::checkBoardWin(unsigned short xPos, unsigned short yPos) const
 
 	return States::Nil;
 }
+
 States Board::getState(unsigned short xPos, unsigned short yPos) const
 {
 	return states[xPos - 1][yPos - 1];
