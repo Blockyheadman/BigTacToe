@@ -1,5 +1,6 @@
 #include <iostream>
 #include <array>
+#include <stdlib.h>
 
 #include "Board.h"
 
@@ -46,11 +47,21 @@ static std::array<unsigned short, 2> getUserInput(unsigned short boardSize)
 int main()
 {
 	unsigned int turn = 0;
-	Board bigBoard = Board();
-	Board innerBoards[9];
 
-	for (auto& innerBoard : innerBoards)
-		innerBoard = Board();
+	Board *pBigBoard = new Board();
+	if (NULL == pBigBoard) {
+		puts("could not allocate memory to heap.");
+		return -1;
+	}
+
+	Board *pInnerBoards = (Board*)malloc(9 * sizeof(Board));
+	if (NULL == pInnerBoards) {
+		puts("could not allocate memory to heap.");
+		return -1;
+	}
+
+	for (int i = 0; i < 9; i++)
+		new (pInnerBoards + i) Board();
 
 	unsigned short bigXPos;
 	unsigned short bigYPos;
@@ -65,18 +76,18 @@ int main()
 
 	do
 	{
-		bigBoard.printBoard();
+		pBigBoard->printBoard();
 		std::cout << (turn % 2 == 0 ? "X" : "O") << " turn.\n-----\n";
 
 		// get big board option
-		input_array = getUserInput(bigBoard.getBoardSize());
+		input_array = getUserInput(pBigBoard->getBoardSize());
 
 		bigXPos = input_array[0];
 		bigYPos = input_array[1];
 
 		clearScreen();
 
-		if (bigBoard.getState(bigXPos, bigYPos) != States::Nil)
+		if (pBigBoard->getState(bigXPos, bigYPos) != States::Nil)
 		{
 			std::cout << "This board has already been completed. Pick a different one.\n" << std::endl;
 			continue;
@@ -91,22 +102,22 @@ int main()
 		while (insideInnerBoard)
 		{
 			std::cout << "Inner board #" << currentBoard + 1 << '\n';
-			innerBoards[currentBoard].printBoard();
+			pInnerBoards[currentBoard].printBoard();
 
-			input_array = getUserInput(bigBoard.getBoardSize());
+			input_array = getUserInput(pBigBoard->getBoardSize());
 
 			xPos = input_array[0];
 			yPos = input_array[1];
 
-			if (!innerBoards[currentBoard].placeMark(xPos, yPos, turn % 2 == 0 ? States::X : States::O))
+			if (!pInnerBoards[currentBoard].placeMark(xPos, yPos, turn % 2 == 0 ? States::X : States::O))
 			{
 				clearScreen();
 				std::cout << "Spot already taken! Try a different spot." << std::endl;
 				continue;
 			}
 
-			if (innerBoards[currentBoard].checkBoardWin(xPos, yPos) != States::Nil)
-				bigBoard.placeMark(bigXPos, bigYPos, turn % 2 == 0 ? States::X : States::O);
+			if (pInnerBoards[currentBoard].checkBoardWin(xPos, yPos) != States::Nil)
+				pBigBoard->placeMark(bigXPos, bigYPos, turn % 2 == 0 ? States::X : States::O);
 
 			insideInnerBoard = false;
 		}
@@ -115,7 +126,7 @@ int main()
 		clearScreen();
 		std::cout << "\n\n";
 
-		if (bigBoard.checkBoardWin(bigXPos, bigYPos) != States::Nil) {
+		if (pBigBoard->checkBoardWin(bigXPos, bigYPos) != States::Nil) {
 			break;
 		}
 
@@ -123,6 +134,14 @@ int main()
 
 	} while (true);
 
-	bigBoard.printBoard();
+	pBigBoard->printBoard();
 	std::cout << '\n' << Board::getStateString(turn % 2 == 0 ? States::X : States::O) << " has won the game!\n\n";
+
+	for (int i = 0; i < 9; i++)
+		pInnerBoards[i].~Board();
+
+	delete pBigBoard;
+	free(pInnerBoards);
+
+	return 0;
 }
