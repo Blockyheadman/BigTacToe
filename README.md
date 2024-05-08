@@ -2,9 +2,8 @@
 ## It's TicTacToe, but bigger. (For a school project)
 
 ## DO NOTE:
-
-This program has been flagged as a trojan on my device.
-I promise, if you look through the code, there is no malicious intent going on.
+This program may false positive as a trojan.
+If you look through the code, there is no malicious intent going on.
 It's just TicTacToe.
 
 ## Controls
