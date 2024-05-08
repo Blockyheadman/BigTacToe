@@ -6,7 +6,8 @@ enum States
 {
 	Nil = 0,
 	X = 1,
-	O = 2
+	O = 2,
+	Draw = 3
 };
 
 class Board

@@ -116,8 +116,11 @@ int main()
 				continue;
 			}
 
-			if (pInnerBoards[currentBoard].checkBoardWin(xPos, yPos) != States::Nil)
+			States innerWin = pInnerBoards[currentBoard].checkBoardWin(xPos, yPos);
+			if (innerWin != States::Nil && innerWin != States::Draw)
 				pBigBoard->placeMark(bigXPos, bigYPos, turn % 2 == 0 ? States::X : States::O);
+			else if (innerWin == States::Draw)
+				pBigBoard->placeMark(bigXPos, bigYPos, States::Draw);
 
 			insideInnerBoard = false;
 		}
@@ -135,7 +138,10 @@ int main()
 	} while (true);
 
 	pBigBoard->printBoard();
-	std::cout << '\n' << Board::getStateString(turn % 2 == 0 ? States::X : States::O) << " has won the game!\n\n";
+	if (pBigBoard->checkBoardWin(bigXPos, bigYPos) == States::Draw)
+		std::cout << "\nThe game is a draw!" << std::endl;
+	else
+		std::cout << '\n' << Board::getStateString(turn % 2 == 0 ? States::X : States::O) << " has won the game!\n" << std::endl;
 
 	for (int i = 0; i < 9; i++)
 		pInnerBoards[i].~Board();

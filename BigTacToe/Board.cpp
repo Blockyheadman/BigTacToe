@@ -31,10 +31,20 @@ void Board::printBoard() const
 		for (int j = 0; j < states[i].size(); j++)
 		{
 			std::cout << "|";
-			if (states[i][j] == States::X) std::cout << " X ";
-			else if (states[i][j] == States::O) std::cout << " O ";
-			//else if (states[i][j] == States::Nil) std::cout << "Nil"; // for debug reasons to see if a spot is nil
-			else std::cout << "   ";
+
+			switch (states[i][j]) {
+			case States::X:
+				std::cout << " X ";
+				break;
+			case States::O:
+				std::cout << " O ";
+				break;
+			case States::Draw:
+				std::cout << "Tie";
+				break;
+			default:
+				std::cout << "   ";
+			}
 		}
 		std::cout << "|" << std::endl;
 		std::cout << "  ";
@@ -57,8 +67,10 @@ bool Board::placeMark(unsigned short xPos, unsigned short yPos, States state)
 
 }
 
+// checks the board winning state, optional parameters if not checking a win from the stored win state.
 States Board::checkBoardWin(unsigned short xPos, unsigned short yPos) const
 {
+
 	const States playerState = states[xPos - 1][yPos - 1];
 
 	if (playerState == States::Nil)
@@ -68,8 +80,9 @@ States Board::checkBoardWin(unsigned short xPos, unsigned short yPos) const
 	for (unsigned short i = 0; i < size; i++) {
 		if (states[xPos - 1][i] != playerState)
 			break;
-		if (i == size - 1)
+		if (i == size - 1) {
 			return playerState;
+		}
 	}
 
 	// check for row win
@@ -100,7 +113,13 @@ States Board::checkBoardWin(unsigned short xPos, unsigned short yPos) const
 		}
 	}
 
-	return States::Nil;
+	for (int i = 0; i < states.size(); i++) {
+		for (int j = 0; j < states[i].size(); j++)
+			if (states[i][j] == States::Nil)
+				return States::Nil;
+	}
+
+	return States::Draw;
 }
 
 States Board::getState(unsigned short xPos, unsigned short yPos) const
